@@ -1,4 +1,4 @@
-# Context2Bundle
+pi6# Context2Bundle
 Context2Bundle: Diversified Personalized Bundle Recommendation
 
 Context2Bundle(C2B) is a personalized bundle recommendation framework, which uses a customized sequence generation network to encode user context and generate candidate bundles, then controls the diversity of the candidates and forms the final bundle recommendation list by MWIS(maximum weighted k-induced subgraph) as re-ranking strategy.

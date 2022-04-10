@@ -5,7 +5,8 @@ import pickle
 import numpy as np
 from tqdm import tqdm
 from collections import Counter
-from metrics import jaccard, precision
+from utils import metrics
+
 
 
 def subsets(nums, mi=2, ma=5):
@@ -44,10 +45,10 @@ def main(flag, k):
     preds = freq.most_common(k)
     preds = [[i for i in t[0]] for t in preds]
 
-    total, jacc, prec = 0, jaccard(preds), 0.0
+    total, jacc, prec = 0, metrics.jaccard(preds), 0.0
     for uid, hist, pos in gen_groundtruth_data:
         groundtruth = list(bundle_map[pos])
-        prec += precision(groundtruth, preds)
+        prec += metrics.precision(groundtruth, preds)
         total += 1
 
     print(flag, 'P@%d: %.4f%%\tDiv: %.4f' % (k, prec * 100 / total, -jacc))
@@ -56,5 +57,6 @@ def main(flag, k):
 if __name__ == '__main__':
     main('clo', k=5)
     main('clo', k=10)
+    print("done")
     # main('ele', k=5)
     # main('ele', k=10)
