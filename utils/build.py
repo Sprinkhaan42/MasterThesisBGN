@@ -33,6 +33,10 @@ def main(flag):
         reviews_path = '../data/reviews_Electronics_5.json'
         meta_path = '../data/meta_Electronics.json'
         save_path = '../data/bundle_ele.pkl'
+    elif flag == 'spo':
+        reviews_path = '../data/Sports_and_Outdoors_5.json'
+        meta_path = '../data/meta_Sports_and_Outdoors.json'
+        save_path = '../data/bundle_spo.pkl'
     else:
         assert False
     random.seed(1234)
@@ -142,5 +146,6 @@ def main(flag):
 
 
 if __name__ == '__main__':
-    main('clo')
+    # main('clo')
     # main('ele')
+    main('spo')
