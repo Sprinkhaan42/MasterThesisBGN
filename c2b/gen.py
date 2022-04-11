@@ -157,7 +157,7 @@ def main(flag):
         model_path = 'ele/model-116000'
     elif flag == 'spo':
         source_path = '../data/bundle_spo.pkl'
-        model_path = 'spo/model-116000'
+        model_path = 'spo/model-19224'
     else:
         assert False
 
