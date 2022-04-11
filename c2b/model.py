@@ -259,7 +259,7 @@ class Model():
 
 
 def t_seq(flag):
-  assert flag in ['clo', 'ele']
+  assert flag in ['clo', 'ele','spo']
   source_path = '../data/bundle_%s.pkl' % flag
   save_path = '%s/model' % flag
 
@@ -306,5 +306,6 @@ if __name__=="__main__":
   np.random.seed(1234)
   tf.set_random_seed(1234)
   os.environ['CUDA_VISIBLE_DEVICES'] = '1'
-  t_seq('clo')
+  # t_seq('clo')
   # t_seq('ele')
+  t_seq('spo')
