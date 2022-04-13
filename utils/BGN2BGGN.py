@@ -73,16 +73,29 @@ bundle_count = len(bundle_all) - 1
 bundle_max_len = len(bundle_all[0])
 
 # %%
-# creates bundle item created
+# creates user bundle
+with open(save_path1, 'w') as f:
+    write_to_file_1 = ""
+    for uid, hist in tqdm(reviews_df.groupby('reviewerID')):
+        hist_group = hist.groupby('unixReviewTime')
+        if len(hist_group) <= 1: continue
+        for _, group in hist_group:
+            bundle = group['asin'].tolist()
+            bundle_number = bundle_map[tuple(bundle)]
+            user_number = group['reviewerID'].tolist()[0]
+            to_add_line_1 = str(user_number) + '\t' + str(bundle_number) + '\n'
+            write_to_file_1 += to_add_line_1
+    f.write(write_to_file_1)
+
+# %%
+# creates bundle item
 with open(save_path2, 'w') as f:
-    write_to_file = ""
+    write_to_file_2 = ""
     for key in bundle_map:
-        print('new bundle')
         for i in key:
-            to_add_line = str(i) + '\t' + str(bundle_map[key]) + '\n'
-            print(to_add_line)
-            write_to_file += to_add_line
-    f.write(write_to_file)
+            to_add_line_2 = str(i) + '\t' + str(bundle_map[key]) + '\n'
+            write_to_file_2 += to_add_line_2
+    f.write(write_to_file_2)
 
 
 
