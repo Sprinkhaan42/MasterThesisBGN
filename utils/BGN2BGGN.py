@@ -25,8 +25,11 @@ def build_map(df, col_name):
 # def main():
 reviews_path = '../data/Sports_and_Outdoors_5.json'
 meta_path = '../data/meta_Sports_and_Outdoors.json'
-save_path1 = '../data/user_bundle.txt'
-save_path2 = '../data/bundle_item.txt'
+save_path1 = '../data/user_bundle_original.txt'
+save_path2 = '../data/bundle_item_original.txt'
+save_path3 = '../data/user_bundle_train.txt'
+save_path4 = '../data/user_bundle_test.txt'
+save_path5 = '../data/bundle_item.txt'
 
 reviews_df = to_df(reviews_path)
 reviews_df = reviews_df[['reviewerID', 'asin', 'unixReviewTime']]
@@ -97,5 +100,41 @@ with open(save_path2, 'w') as f:
             write_to_file_2 += to_add_line_2
     f.write(write_to_file_2)
 
+# %%
+bundle_list = []
+# creates user bundle
+with open(save_path3, 'w') as f:
+    with open(save_path4, 'w') as g:
+        write_to_file_3 = ""
+        write_to_file_4 = ""
+        i = 0
+        for uid, hist in tqdm(reviews_df.groupby('reviewerID')):
+            hist_group = hist.groupby('unixReviewTime')
+            if len(hist_group) <= 1: continue
+            for _, group in hist_group:
+                bundle = group['asin'].tolist()
+                bundle_number = bundle_map[tuple(bundle)]
+                user_number = group['reviewerID'].tolist()[0]
+                to_add_line_3 = str(user_number) + '\t' + str(bundle_number) + '\n'
+                if i < 100:
+                    write_to_file_3 += to_add_line_3
+                elif 100 <= i < 200:
+                    write_to_file_4 += to_add_line_3
+                else:
+                    break
+                i += 1
+                bundle_list.append(bundle_number)
+        f.write(write_to_file_3)
+        g.write(write_to_file_4)
 
+# creates bundle item
+with open(save_path5, 'w') as f:
+    write_to_file_5 = ""
+    for key in bundle_map:
+        if bundle_map[key] in bundle_list:
+            for i in key:
+                to_add_line_5 = str(i) + '\t' + str(bundle_map[key]) + '\n'
+                write_to_file_5 += to_add_line_5
+    f.write(write_to_file_5)
 
+print("DONE")
