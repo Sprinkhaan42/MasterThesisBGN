@@ -144,6 +144,7 @@ with open(save_path6, 'w') as f:
                 write_to_file_5 += to_add_line_5
     f.write(write_to_file_5)
 
+# %%
 with open(save_path7, 'w') as f:
     data1 = pd.read_csv('../data/BGGN_format/bundle_item.txt', sep='\t', header=None)
     data1.columns = ["bundle", "item"]
@@ -156,5 +157,5 @@ with open(save_path7, 'w') as f:
     user_list = vertical_stack['user'].tolist()
     user_count = len(user_list) - 1
     item_count = len(item_list) - 1
-    write_to_file_6 = str(user_count) + '\t' + str(bundle_count) + '\t' + item_count
+    write_to_file_6 = str(user_count) + '\t' + str(bundle_count) + '\t' + str(item_count)
 print("DONE")
