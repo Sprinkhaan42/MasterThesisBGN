@@ -155,9 +155,11 @@ with open(save_path7, 'w') as f:
     data3.columns = ["user", "bundle"]
     vertical_stack = pd.concat([data2, data3], axis=0)
     item_list = data1['item'].tolist()
+    item_set = set(item_list)
     user_list = vertical_stack['user'].tolist()
-    user_count = len(user_list) - 1
-    item_count = len(item_list) - 1
+    user_set = set(user_list)
+    user_count = len(user_set) - 1
+    item_count = len(item_set) - 1
     write_to_file_7 = str(user_count) + '\t' + '49' + '\t' + str(item_count)
     f.write(write_to_file_7)
 print("DONE")
