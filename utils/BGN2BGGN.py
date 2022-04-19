@@ -86,6 +86,7 @@ with open(save_path1, 'w') as f:
         if len(hist_group) <= 1: continue
         for _, group in hist_group:
             bundle = group['asin'].tolist()
+            # TODO: Fix this mapping problem
             bundle_number = bundle_map[tuple(bundle)]
             user_number = group['reviewerID'].tolist()[0]
             to_add_line_1 = str(user_number) + '\t' + str(bundle_number) + '\n'
@@ -98,6 +99,7 @@ with open(save_path2, 'w') as f:
     write_to_file_2 = ""
     for key in bundle_map:
         for i in key:
+            # TODO: Fix this mapping problem --> this is probably correct
             to_add_line_2 = str(i) + '\t' + str(bundle_map[key]) + '\n'
             write_to_file_2 += to_add_line_2
     f.write(write_to_file_2)
@@ -158,8 +160,20 @@ with open(save_path7, 'w') as f:
     item_set = set(item_list)
     user_list = vertical_stack['user'].tolist()
     user_set = set(user_list)
-    user_count = len(user_set) - 1
-    item_count = len(item_set) - 1
-    write_to_file_7 = str(user_count) + '\t' + '49' + '\t' + str(item_count)
+    bundle_list = vertical_stack['bundle'].tolist()
+    bundle_set = set(bundle_list)
+    bundle_count2 = len(set(data1['bundle'].tolist()))
+
+    user_count = len(user_set)
+    item_count = len(item_set)
+    bundle_count = len(bundle_set)
+
+    print(sorted(bundle_set))
+    print(sorted(item_set))
+    print(vertical_stack)
+    write_to_file_7 = str(user_count) + '\t' + str(bundle_count) + '\t' + str(item_count) + '\t' + str(bundle_count2)
+    print(write_to_file_7)
     f.write(write_to_file_7)
+
+    # are the user_bundle files user_item files??
 print("DONE")
