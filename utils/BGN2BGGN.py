@@ -35,13 +35,11 @@ save_path7 = '../data/BGGN_format/sports_data_size.txt'
 
 reviews_df = to_df(reviews_path)
 reviews_df = reviews_df[['reviewerID', 'asin', 'unixReviewTime']]
-reviews_df
 
 meta_df = to_df(meta_path)
 meta_df = meta_df[meta_df['asin'].isin(reviews_df['asin'].unique())]
 meta_df = meta_df.reset_index(drop=True)
 meta_df['categories'] = meta_df['categories'].map(lambda x: x[-1][-1])
-meta_df
 
 # %%
 # main()
@@ -73,9 +71,13 @@ for _, hist in tqdm(reviews_df.groupby('reviewerID')):
         bundle = group['asin'].tolist()
         bundle_all.append(tuple(bundle))
 bundle_all.remove((-1,))
-bundle_map = dict(zip(bundle_all, range(len(bundle_all))))
-bundle_count = len(bundle_all) - 1
-bundle_max_len = len(bundle_all[0])
+bundle_map = {}
+i = 0
+for bundle in bundle_all:
+    bundle_map[bundle] = i
+    i = i + 1
+print(len(bundle_all))
+bundle_count = len(bundle_all)
 
 # %%
 # creates user bundle
@@ -92,18 +94,20 @@ with open(save_path1, 'w') as f:
             to_add_line_1 = str(user_number) + '\t' + str(bundle_number) + '\n'
             write_to_file_1 += to_add_line_1
     f.write(write_to_file_1)
-
+print(len(bundle_all))
 # %%
 # creates bundle item
 with open(save_path2, 'w') as f:
     write_to_file_2 = ""
+    # a key is a bundle
     for key in bundle_map:
+        # every i is an item
         for i in key:
-            # TODO: Fix this mapping problem --> this is probably correct
-            to_add_line_2 = str(i) + '\t' + str(bundle_map[key]) + '\n'
+            # TODO: check if this is switched correctly
+            to_add_line_2 = str(bundle_map[key]) + '\t' + str(i) + '\n'
             write_to_file_2 += to_add_line_2
     f.write(write_to_file_2)
-
+print(len(bundle_all))
 # %%
 bundle_list = []
 # creates user bundle
@@ -135,7 +139,7 @@ with open(save_path3, 'w') as f:
             f.write(write_to_file_3)
             g.write(write_to_file_4)
             h.write((write_to_file_34))
-
+print(len(bundle_all))
 # %%
 # creates bundle item
 with open(save_path6, 'w') as f:
@@ -151,16 +155,18 @@ with open(save_path6, 'w') as f:
 with open(save_path7, 'w') as f:
     data1 = pd.read_csv('../data/BGGN_format/bundle_item.txt', sep='\t', header=None)
     data1.columns = ["bundle", "item"]
-    data2 = pd.read_csv('../data/BGGN_format/user_bundle_test.txt', sep='\t', header=None)
+    data2 = pd.read_csv('../data/BGGN_format/user_bundle.txt', sep='\t', header=None)
     data2.columns = ["user", "bundle"]
     data3 = pd.read_csv('../data/BGGN_format/user_bundle_train.txt', sep='\t', header=None)
     data3.columns = ["user", "bundle"]
     vertical_stack = pd.concat([data2, data3], axis=0)
     item_list = data1['item'].tolist()
     item_set = set(item_list)
+    user_list = data2['user'].tolist()
     user_list = vertical_stack['user'].tolist()
     user_set = set(user_list)
     bundle_list = vertical_stack['bundle'].tolist()
+    bundle_list = data2['bundle'].tolist()
     bundle_set = set(bundle_list)
     bundle_count2 = len(set(data1['bundle'].tolist()))
 
@@ -168,12 +174,8 @@ with open(save_path7, 'w') as f:
     item_count = len(item_set)
     bundle_count = len(bundle_set)
 
-    print(sorted(bundle_set))
-    print(sorted(item_set))
-    print(vertical_stack)
-    write_to_file_7 = str(user_count) + '\t' + str(bundle_count) + '\t' + str(item_count) + '\t' + str(bundle_count2)
+    write_to_file_7 = str(user_count) + '\t' + str(bundle_count) + '\t' + str(item_count)
     print(write_to_file_7)
     f.write(write_to_file_7)
 
-    # are the user_bundle files user_item files??
 print("DONE")
