@@ -22,7 +22,7 @@ save_path3 = '../data/BGGN_format2/user_bundle_train.txt'
 save_path4 = '../data/BGGN_format2/user_bundle_test.txt'
 save_path5 = '../data/BGGN_format2/user_bundle.txt'
 save_path6 = '../data/BGGN_format2/bundle_item.txt'
-save_path7 = '../data/BGGN_format2/sports_data_size.txt'
+save_path7 = '../data/BGGN_format2/Sports_data_size.txt'
 
 # %%
 reviews_df = to_df(reviews_path)
@@ -82,7 +82,6 @@ for bundle in bundle_tuple:
     bundle_dict_numbered[counter] = bundle
     counter += 1
 
-
 # %%
 print("Writing user-bundle original... \n")
 with open(save_path1, 'w') as f:
@@ -99,9 +98,6 @@ with open(save_path1, 'w') as f:
 
     f.write(write_to_file_1)
 
-
-
-
 # %%
 print("Writing bundle-item original... \n")
 with open(save_path2, 'w') as f:
@@ -114,3 +110,31 @@ with open(save_path2, 'w') as f:
             write_to_file_2 += to_add_line_2
     f.write(write_to_file_2)
 
+# %%
+print("Writing sports data size")
+with open(save_path7, 'w') as f:
+    data1 = pd.read_csv('../data/BGGN_format2/bundle_item_original.txt', sep='\t', header=None)
+    data1.columns = ["bundle", "item"]
+    data2 = pd.read_csv('../data/BGGN_format2/user_bundle_original.txt', sep='\t', header=None)
+    data2.columns = ["user", "bundle"]
+    # data3 = pd.read_csv('../data/BGGN_format2/user_bundle_train.txt', sep='\t', header=None)
+    # data3.columns = ["user", "bundle"]
+    # vertical_stack = pd.concat([data2, data3], axis=0)
+    item_list = data1['item'].tolist()
+    item_set = set(item_list)
+    user_list = data2['user'].tolist()
+    # user_list = vertical_stack['user'].tolist()
+    user_set = set(user_list)
+    # bundle_list = vertical_stack['bundle'].tolist()
+    bundle_list = data2['bundle'].tolist()
+    bundle_set = set(bundle_list)
+
+    user_count = len(user_set)
+    item_count = len(item_set)
+    bundle_count1 = len(bundle_set)
+    bundle_count2 = len(set(data1['bundle'].tolist()))
+    bundle_count = max(bundle_count1, bundle_count2)
+
+    write_to_file_7 = str(user_count) + '\t' + str(bundle_count) + '\t' + str(item_count)
+    print(write_to_file_7)
+    f.write(write_to_file_7)
