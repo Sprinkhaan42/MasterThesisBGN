@@ -60,6 +60,7 @@ reviews_df['reviewerID'] = reviews_df['reviewerID'].map(lambda x: user_map[x])
 reviews_df.rename(columns={'reviewerID': 'user', 'asin': 'item'}, inplace=True)
 
 # %%
+print("Creating bundle-item dictionaries... \n")
 usergroups = reviews_df.groupby(by='user')
 bundle_list = []
 for _, i in tqdm(usergroups):
@@ -74,25 +75,41 @@ bundle_count = len(bundle_tuple)
 
 # %%
 bundle_dict = {}
+bundle_dict_numbered = {}
 counter = 0
 for bundle in bundle_tuple:
-    bundle_dict[counter] = bundle
+    bundle_dict[bundle] = counter
+    bundle_dict_numbered[counter] = bundle
     counter += 1
-print(len(bundle_dict))
-
-# %%
-# with open(save_path1, 'w') as f:
-
-
 
 
 # %%
+print("Writing user-bundle original... \n")
+with open(save_path1, 'w') as f:
+    write_to_file_1 = ""
+    usergroups = reviews_df.groupby(by='user')
+    for _, i in tqdm(usergroups):
+        user_time_groups = i.groupby(by='unixReviewTime')
+        for _, j in user_time_groups:
+            if not (len(j) <= 1):
+                bundle = bundle_dict[tuple(j['item'].tolist())]
+                user = j['user'].tolist()[0]
+                to_add_line_1 = str(user) + '\t' + str(bundle) + '\n'
+                write_to_file_1 += to_add_line_1
+
+    f.write(write_to_file_1)
+
+
+
+
+# %%
+print("Writing bundle-item original... \n")
 with open(save_path2, 'w') as f:
     write_to_file_2 = ""
     # a key is a bundle number
-    for key in tqdm(bundle_dict):
+    for key in tqdm(bundle_dict_numbered):
         # every i is an item
-        for item in bundle_dict[key]:
+        for item in bundle_dict_numbered[key]:
             to_add_line_2 = str(key) + '\t' + str(item) + '\n'
             write_to_file_2 += to_add_line_2
     f.write(write_to_file_2)
