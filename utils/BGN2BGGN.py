@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 
 from tqdm import tqdm
@@ -76,10 +75,10 @@ i = 0
 for bundle in bundle_all:
     bundle_map[bundle] = i
     i = i + 1
-print(len(bundle_all))
 bundle_count = len(bundle_all)
 
 # %%
+print(len(bundle_map))
 # creates user bundle
 with open(save_path1, 'w') as f:
     write_to_file_1 = ""
@@ -88,13 +87,12 @@ with open(save_path1, 'w') as f:
         if len(hist_group) <= 1: continue
         for _, group in hist_group:
             bundle = group['asin'].tolist()
-            # TODO: Fix this mapping problem
             bundle_number = bundle_map[tuple(bundle)]
             user_number = group['reviewerID'].tolist()[0]
             to_add_line_1 = str(user_number) + '\t' + str(bundle_number) + '\n'
             write_to_file_1 += to_add_line_1
     f.write(write_to_file_1)
-print(len(bundle_all))
+print(len(bundle_map))
 # %%
 # creates bundle item
 with open(save_path2, 'w') as f:
@@ -107,7 +105,6 @@ with open(save_path2, 'w') as f:
             to_add_line_2 = str(bundle_map[key]) + '\t' + str(i) + '\n'
             write_to_file_2 += to_add_line_2
     f.write(write_to_file_2)
-print(len(bundle_all))
 # %%
 bundle_list = []
 # creates user bundle
@@ -139,7 +136,6 @@ with open(save_path3, 'w') as f:
             f.write(write_to_file_3)
             g.write(write_to_file_4)
             h.write((write_to_file_34))
-print(len(bundle_all))
 # %%
 # creates bundle item
 with open(save_path6, 'w') as f:
@@ -147,10 +143,9 @@ with open(save_path6, 'w') as f:
     for key in bundle_map:
         if bundle_map[key] in bundle_list:
             for i in key:
-                to_add_line_5 = str(i) + '\t' + str(bundle_map[key]) + '\n'
+                to_add_line_5 = str(bundle_map[key]) + '\t' + str(i) + '\n'
                 write_to_file_5 += to_add_line_5
     f.write(write_to_file_5)
-
 # %%
 with open(save_path7, 'w') as f:
     data1 = pd.read_csv('../data/BGGN_format/bundle_item.txt', sep='\t', header=None)
@@ -177,5 +172,4 @@ with open(save_path7, 'w') as f:
     write_to_file_7 = str(user_count) + '\t' + str(bundle_count) + '\t' + str(item_count)
     print(write_to_file_7)
     f.write(write_to_file_7)
-
 print("DONE")
