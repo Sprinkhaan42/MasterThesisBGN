@@ -83,7 +83,7 @@ for bundle in bundle_tuple:
     counter += 1
 
 # %%
-print("Writing user-bundle original... \n")
+print("Writing user-bundle original... ")
 with open(save_path1, 'w') as f:
     write_to_file_1 = ""
     usergroups = reviews_df.groupby(by='user')
@@ -99,7 +99,7 @@ with open(save_path1, 'w') as f:
     f.write(write_to_file_1)
 
 # %%
-print("Writing bundle-item original... \n")
+print("Writing bundle-item original... ")
 with open(save_path2, 'w') as f:
     write_to_file_2 = ""
     # a key is a bundle number
@@ -109,6 +109,39 @@ with open(save_path2, 'w') as f:
             to_add_line_2 = str(key) + '\t' + str(item) + '\n'
             write_to_file_2 += to_add_line_2
     f.write(write_to_file_2)
+
+# %%
+print("Writing user bundle test and train...")
+with open(save_path3, 'w') as f:
+    with open(save_path4, 'w') as g:
+        with open(save_path5, 'w') as h:
+            write_to_file_3 = ""
+            write_to_file_4 = ""
+            write_to_file_5 = ""
+            with open(save_path1, 'r') as r:
+                counter = 0
+                for line in tqdm(r):
+                    if counter < 40000:
+                        write_to_file_3 += line
+                        write_to_file_5 += line
+                    else:
+                        write_to_file_4 += line
+                        write_to_file_5 += line
+                    counter += 1
+            f.write(write_to_file_3)
+            g.write(write_to_file_4)
+            h.write(write_to_file_5)
+
+# %%
+print("Writing bundle_item...")
+with open(save_path6, 'w') as f:
+    write_to_file_6 = ""
+    with open(save_path2, 'r') as r:
+        for line in tqdm(r):
+            write_to_file_6 += line
+    f.write(write_to_file_6)
+
+
 
 # %%
 print("Writing sports data size")
