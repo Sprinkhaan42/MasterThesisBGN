@@ -104,6 +104,9 @@ with open(save_path2, 'w') as f:
     for key in tqdm(bundle_dict_numbered):
         # every i is an item
         for item in bundle_dict_numbered[key]:
+            if item == 0:
+                print('check')
+                print(key)
             to_add_line_2 = str(key) + '\t' + str(item) + '\n'
             write_to_file_2 += to_add_line_2
     f.write(write_to_file_2)
