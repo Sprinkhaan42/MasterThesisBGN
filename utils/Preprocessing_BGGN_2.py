@@ -37,7 +37,6 @@ number = 0
 for i in tqdm(asin_set):
     item_map[i] = number
     number = number + 1
-item_count = len(item_map)
 
 # %%
 reviews_df['asin'] = reviews_df['asin'].map(lambda x: item_map[x])
@@ -51,7 +50,6 @@ number = 0
 for i in tqdm(user_set):
     user_map[i] = number
     number = number + 1
-user_count = len(user_map)
 
 # %%
 reviews_df['reviewerID'] = reviews_df['reviewerID'].map(lambda x: user_map[x])
@@ -141,8 +139,6 @@ with open(save_path6, 'w') as f:
             write_to_file_6 += line
     f.write(write_to_file_6)
 
-
-
 # %%
 print("Writing sports data size")
 with open(save_path7, 'w') as f:
@@ -154,20 +150,16 @@ with open(save_path7, 'w') as f:
     # data3.columns = ["user", "bundle"]
     # vertical_stack = pd.concat([data2, data3], axis=0)
     item_list = data1['item'].tolist()
-    item_set = set(item_list)
     user_list = data2['user'].tolist()
     # user_list = vertical_stack['user'].tolist()
-    user_set = set(user_list)
     # bundle_list = vertical_stack['bundle'].tolist()
     bundle_list = data2['bundle'].tolist()
-    bundle_set = set(bundle_list)
 
-    user_count = len(user_set)
-    item_count = len(item_set)
-    bundle_count1 = len(bundle_set)
-    bundle_count2 = len(set(data1['bundle'].tolist()))
+    user_count = max(user_list)
+    item_count = max(item_list)
+    bundle_count1 = max(bundle_list) + 1
+    bundle_count2 = max(data1['bundle'].tolist())
     bundle_count = max(bundle_count1, bundle_count2)
-
     write_to_file_7 = str(user_count) + '\t' + str(bundle_count) + '\t' + str(item_count)
     print(write_to_file_7)
     f.write(write_to_file_7)
