@@ -68,17 +68,25 @@ for _, i in tqdm(usergroups):
             bundle = j['item'].tolist()
             bundle_list.append(tuple(bundle))
 
-bundle_tuple = tuple(bundle_list)
-bundle_count = len(bundle_tuple)
-
 # %%
 bundle_dict = {}
-bundle_dict_numbered = {}
 counter = 0
-for bundle in bundle_tuple:
+for bundle in bundle_list:
     bundle_dict[bundle] = counter
-    bundle_dict_numbered[counter] = bundle
     counter += 1
+
+bundle_dict_numbered = {}
+recounter = 0
+for key in bundle_dict:
+    bundle_dict[key] = recounter
+    bundle_dict_numbered[recounter] = key
+    recounter += 1
+
+bundle_count = len(bundle_dict)
+bundle_count2 = max(bundle_dict.values()) + 1
+
+# what happens is that bundles that come a second time get rewritten.
+# therefore lenght does not equal the max number and a renumbering is needed.
 
 # %%
 print("Writing user-bundle original... ")
@@ -104,9 +112,6 @@ with open(save_path2, 'w') as f:
     for key in tqdm(bundle_dict_numbered):
         # every i is an item
         for item in bundle_dict_numbered[key]:
-            if item == 0:
-                print('check')
-                print(key)
             to_add_line_2 = str(key) + '\t' + str(item) + '\n'
             write_to_file_2 += to_add_line_2
     f.write(write_to_file_2)
@@ -161,7 +166,7 @@ with open(save_path7, 'w') as f:
     user_count = max(user_list)
     item_count = max(item_list)
     bundle_count1 = max(bundle_list) + 1
-    bundle_count2 = max(data1['bundle'].tolist())
+    bundle_count2 = max(data1['bundle'].tolist()) + 1
     bundle_count = max(bundle_count1, bundle_count2)
     write_to_file_7 = str(user_count) + '\t' + str(bundle_count) + '\t' + str(item_count)
     print(write_to_file_7)
