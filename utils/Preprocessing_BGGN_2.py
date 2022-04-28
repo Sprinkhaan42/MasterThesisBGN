@@ -23,6 +23,7 @@ save_path4 = '../data/BGGN_format2/user_bundle_test.txt'
 save_path5 = '../data/BGGN_format2/user_bundle.txt'
 save_path6 = '../data/BGGN_format2/bundle_item.txt'
 save_path7 = '../data/BGGN_format2/Sports_data_size.txt'
+save_pathx = '../data/BGGN_format2/renumber_item.txt'
 
 # %%
 reviews_df = to_df(reviews_path)
@@ -127,10 +128,10 @@ with open(save_path3, 'w') as f:
             with open(save_path1, 'r') as r:
                 counter = 0
                 for line in tqdm(r):
-                    if counter < 40000:
+                    if counter < 100:
                         write_to_file_3 += line
                         write_to_file_5 += line
-                    else:
+                    elif 100 <= counter < 200:
                         write_to_file_4 += line
                         write_to_file_5 += line
                     counter += 1
@@ -142,29 +143,57 @@ with open(save_path3, 'w') as f:
 print("Writing bundle_item...")
 with open(save_path6, 'w') as f:
     write_to_file_6 = ""
-    with open(save_path2, 'r') as r:
-        for line in tqdm(r):
-            write_to_file_6 += line
+    intermediate_file = ""
+    df = pd.read_csv(save_path5, sep='\t', header=None)
+    df.columns = ["user", "bundle"]
+    df.columns = ["user", "bundle"]
+    sampled_bundle_list = df["bundle"].tolist()
+    for bundle in sampled_bundle_list:
+        for item in bundle_dict_numbered[bundle]:
+            to_add_line_intermediate = str(bundle) + '\t' + str(item) + '\n'
+            intermediate_file += to_add_line_intermediate
+    with open(save_pathx, 'w') as x:
+        x.write(intermediate_file)
+    # renumber items to make them start from 0
+    df2 = pd.read_csv(save_pathx, sep='\t', header=None)
+    df2.columns = ["bundle", "item"]
+    renumber_list = df2["item"].tolist()
+    renumber_dict = {}
+    itemcounter = 0
+    for item in renumber_list:
+        renumber_dict[item] = itemcounter
+        itemcounter += 1
+
+    # renumber items that are in multiple bundles
+    renumber_dict_2 = {}
+    itemrecounter2 = 0
+    for key in renumber_dict:
+        renumber_dict_2[key] = itemrecounter2
+        itemrecounter2 += 1
+
+    for bundle in sampled_bundle_list:
+        for item in bundle_dict_numbered[bundle]:
+            to_add_line_6 = str(bundle) + '\t' + str(renumber_dict_2[item]) + '\n'
+            write_to_file_6 += to_add_line_6
+
     f.write(write_to_file_6)
 
 # %%
 print("Writing sports data size")
 with open(save_path7, 'w') as f:
-    data1 = pd.read_csv('../data/BGGN_format2/bundle_item_original.txt', sep='\t', header=None)
+    data1 = pd.read_csv('../data/BGGN_format2/bundle_item.txt', sep='\t', header=None)
     data1.columns = ["bundle", "item"]
-    data2 = pd.read_csv('../data/BGGN_format2/user_bundle_original.txt', sep='\t', header=None)
+    data2 = pd.read_csv('../data/BGGN_format2/user_bundle_test.txt', sep='\t', header=None)
     data2.columns = ["user", "bundle"]
-    # data3 = pd.read_csv('../data/BGGN_format2/user_bundle_train.txt', sep='\t', header=None)
-    # data3.columns = ["user", "bundle"]
-    # vertical_stack = pd.concat([data2, data3], axis=0)
+    data3 = pd.read_csv('../data/BGGN_format2/user_bundle_train.txt', sep='\t', header=None)
+    data3.columns = ["user", "bundle"]
+    vertical_stack = pd.concat([data2, data3], axis=0)
     item_list = data1['item'].tolist()
-    user_list = data2['user'].tolist()
-    # user_list = vertical_stack['user'].tolist()
-    # bundle_list = vertical_stack['bundle'].tolist()
-    bundle_list = data2['bundle'].tolist()
+    user_list = vertical_stack['user'].tolist()
+    bundle_list = vertical_stack['bundle'].tolist()
 
-    user_count = max(user_list)
-    item_count = max(item_list)
+    user_count = max(user_list) + 1
+    item_count = max(item_list) + 1
     bundle_count1 = max(bundle_list) + 1
     bundle_count2 = max(data1['bundle'].tolist()) + 1
     bundle_count = max(bundle_count1, bundle_count2)
