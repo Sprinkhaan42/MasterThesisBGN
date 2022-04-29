@@ -158,6 +158,9 @@ def main(flag):
     elif flag == 'spo':
         source_path = '../data/bundle_spo.pkl'
         model_path = 'spo/model-19224'
+    elif flag == 'toy':
+        source_path = '../data/bundle_toy.pkl'
+        model_path = None
     else:
         assert False
 
@@ -203,7 +206,8 @@ def main(flag):
 if __name__ == '__main__':
     random.seed(1234)
     tf.set_random_seed(1234)
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+    os.environ['CUDA_VISIBLE_DEVICES'] = '1'
     # main('clo')
     # main('ele')
-    main('spo')
+    # main('spo')
+    main('toy')

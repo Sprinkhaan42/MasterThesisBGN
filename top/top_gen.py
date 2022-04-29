@@ -24,6 +24,8 @@ def main(flag, k):
         source_path = '../data/bundle_ele.pkl'
     elif flag == 'spo':
         source_path = '../data/bundle_spo.pkl'
+    elif flag == 'toy':
+        source_path = '../data/bundle_toy.pkl'
     else:
         assert False
 
@@ -60,9 +62,8 @@ if __name__ == '__main__':
     main('spo', k=5)
     main('spo', k=10)
 
-    print("done")
-
-    # main('ele', k=5)
-    # main('ele', k=10)
     main('clo', k=5)
     main('clo', k=10)
+
+    main('toy', k=5)
+    main('toy', k=10)
