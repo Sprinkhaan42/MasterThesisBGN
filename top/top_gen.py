@@ -49,21 +49,25 @@ def main(flag, k):
     preds = freq.most_common(k)
     preds = [[i for i in t[0]] for t in preds]
 
-    total, jacc, prec = 0, metrics.jaccard(preds), 0.0
+    total, jacc, prec, recall, ndcg, mrr = 0, metrics.jaccard(preds), 0.0, 0, 0, 0
     for uid, hist, pos in gen_groundtruth_data:
         groundtruth = list(bundle_map[pos])
         prec += metrics.precision(groundtruth, preds)
+        recall += metrics.Recall(groundtruth, preds)
+        ndcg += metrics.NDCG(groundtruth, preds)
+        mrr += metrics.MRR(groundtruth, preds)
+        if len(preds) == 1:  # topk=1, no diversity
+            jacc += 0
+        else:
+            jacc += metrics.jaccard(preds)
         total += 1
 
-    print(flag, 'P@%d: %.4f%%\tDiv: %.4f' % (k, prec * 100 / total, -jacc))
+    print('%s\tPre@%d: %.4f%%\tRecall@%d: %.4f%%\tNDCG@%d: %.4f%%\tMRR@%d: %.4f%%\tDiv: %.4f'
+          % (flag, k, prec * 100 / total, k, recall * 100 / total, k, ndcg * 100 / total, k, mrr * 100 / total,
+             -jacc / total))
 
 
 if __name__ == '__main__':
-    main('spo', k=5)
     main('spo', k=10)
-
-    main('clo', k=5)
     main('clo', k=10)
-
-    main('toy', k=5)
     main('toy', k=10)
