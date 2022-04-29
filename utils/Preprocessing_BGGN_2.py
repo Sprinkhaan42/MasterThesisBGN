@@ -128,10 +128,10 @@ with open(save_path3, 'w') as f:
             with open(save_path1, 'r') as r:
                 counter = 0
                 for line in tqdm(r):
-                    if counter < 100:
+                    if counter < 40000:
                         write_to_file_3 += line
                         write_to_file_5 += line
-                    elif 100 <= counter < 200:
+                    else:
                         write_to_file_4 += line
                         write_to_file_5 += line
                     counter += 1
@@ -143,6 +143,10 @@ with open(save_path3, 'w') as f:
 print("Writing bundle_item...")
 with open(save_path6, 'w') as f:
     write_to_file_6 = ""
+    with open(save_path2, 'r') as r:
+        for line in tqdm(r):
+            write_to_file_6 += line
+    '''
     intermediate_file = ""
     df = pd.read_csv(save_path5, sep='\t', header=None)
     df.columns = ["user", "bundle"]
@@ -175,7 +179,7 @@ with open(save_path6, 'w') as f:
         for item in bundle_dict_numbered[bundle]:
             to_add_line_6 = str(bundle) + '\t' + str(renumber_dict_2[item]) + '\n'
             write_to_file_6 += to_add_line_6
-
+    '''
     f.write(write_to_file_6)
 
 # %%
