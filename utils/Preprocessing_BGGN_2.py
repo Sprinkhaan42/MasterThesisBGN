@@ -14,16 +14,15 @@ def to_df(file_path):
         return df
 
 
-reviews_path = '../data/Sports_and_Outdoors_5.json'
-meta_path = '../data/meta_Sports_and_Outdoors.json'
-save_path1 = '../data/BGGN_format2/user_bundle_original.txt'
-save_path2 = '../data/BGGN_format2/bundle_item_original.txt'
-save_path3 = '../data/BGGN_format2/user_bundle_train.txt'
-save_path4 = '../data/BGGN_format2/user_bundle_test.txt'
-save_path5 = '../data/BGGN_format2/user_bundle.txt'
-save_path6 = '../data/BGGN_format2/bundle_item.txt'
-save_path7 = '../data/BGGN_format2/Sports_data_size.txt'
-save_pathx = '../data/BGGN_format2/renumber_item.txt'
+reviews_path = '../data/Toys_and_Games_5.json'
+save_path1 = '../data/Toys/user_bundle_original.txt'
+save_path2 = '../data/Toys/bundle_item_original.txt'
+save_path3 = '../data/Toys/user_bundle_train.txt'
+save_path4 = '../data/Toys/user_bundle_test.txt'
+save_path5 = '../data/Toys/user_bundle.txt'
+save_path6 = '../data/Toys/bundle_item.txt'
+save_path7 = '../data/Toys/Toys_data_size.txt'
+save_pathx = '../data/Toys/renumber_item.txt'
 
 # %%
 reviews_df = to_df(reviews_path)
@@ -128,7 +127,7 @@ with open(save_path3, 'w') as f:
             with open(save_path1, 'r') as r:
                 counter = 0
                 for line in tqdm(r):
-                    if counter < 40000:
+                    if counter < 25000:
                         write_to_file_3 += line
                         write_to_file_5 += line
                     else:
@@ -185,11 +184,11 @@ with open(save_path6, 'w') as f:
 # %%
 print("Writing sports data size")
 with open(save_path7, 'w') as f:
-    data1 = pd.read_csv('../data/BGGN_format2/bundle_item.txt', sep='\t', header=None)
+    data1 = pd.read_csv('../data/Toys/bundle_item.txt', sep='\t', header=None)
     data1.columns = ["bundle", "item"]
-    data2 = pd.read_csv('../data/BGGN_format2/user_bundle_test.txt', sep='\t', header=None)
+    data2 = pd.read_csv('../data/Toys/user_bundle_test.txt', sep='\t', header=None)
     data2.columns = ["user", "bundle"]
-    data3 = pd.read_csv('../data/BGGN_format2/user_bundle_train.txt', sep='\t', header=None)
+    data3 = pd.read_csv('../data/Toys/user_bundle_train.txt', sep='\t', header=None)
     data3.columns = ["user", "bundle"]
     vertical_stack = pd.concat([data2, data3], axis=0)
     item_list = data1['item'].tolist()
