@@ -21,7 +21,7 @@ save_path3 = '../data/Clothes/user_bundle_train.txt'
 save_path4 = '../data/Clothes/user_bundle_test.txt'
 save_path5 = '../data/Clothes/user_bundle.txt'
 save_path6 = '../data/Clothes/bundle_item.txt'
-save_path7 = '../data/Clothes/Toys_data_size.txt'
+save_path7 = '../data/Clothes/Clothes_data_size.txt'
 save_pathx = '../data/Clothes/renumber_item.txt'
 
 # %%
